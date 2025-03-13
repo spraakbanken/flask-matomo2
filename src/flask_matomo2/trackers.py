@@ -1,10 +1,11 @@
+"""Trackers for time measurements."""
+
 import time
 import typing
 
 
 class PerfMsTracker:
-    """
-    Measure time between enter and exit and records it in state.
+    """Measure time between enter and exit and records it in state.
 
     >>> scope = {"tracking_data": {}}
     >>> with PerfMsTracker(scope, key="pf_srv"):
@@ -13,6 +14,12 @@ class PerfMsTracker:
     """
 
     def __init__(self, scope: typing.MutableMapping[str, typing.Any], key: str) -> None:
+        """Initialize the PerfMsTracker.
+
+        Args:
+            scope: mapping values tracked in
+            key: the key under this timing is stored
+        """
         self.start_ns = 0.0
         # if "state" not in scope:
         # scope["state"] = {}
@@ -21,16 +28,20 @@ class PerfMsTracker:
         self.scope = scope
         self.key = key
 
-    def __enter__(self):
+    def __enter__(self) -> None:
+        """Start this tracker."""
         self.start_ns = time.perf_counter_ns()
 
-    def __exit__(self, exc_type, exc_value, exc_tb):
+    def __exit__(self, exc_type, exc_value, exc_tb) -> None:  # noqa: ANN001
+        """Finish this tracker."""
         self._record_time(self.key, time.perf_counter_ns())
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> None:
+        """Start this tracker."""
         self.start_ns = time.perf_counter_ns()
 
-    async def __aexit__(self, exc_type, exc_value, exc_tb):
+    async def __aexit__(self, exc_type, exc_value, exc_tb) -> None:  # noqa: ANN001
+        """Finish this tracker."""
         self._record_time(self.key, time.perf_counter_ns())
 
     def _record_time(self, key: str, end_ns: float) -> None:
