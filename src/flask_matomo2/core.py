@@ -14,6 +14,9 @@ from flask import Flask, g, request
 logger = logging.getLogger("flask_matomo2")
 
 
+DEFAULT_HTTP_TIMEOUT: int = 5
+
+
 class Matomo:
     """The Matomo object provides the central interface for interacting with Matomo."""
 
@@ -30,8 +33,11 @@ class Matomo:
         routes_details: typing.Optional[dict[str, dict[str, str]]] = None,
         ignored_patterns: typing.Optional[list[str]] = None,
         ignored_ua_patterns: typing.Optional[list[str]] = None,
+        http_timeout: int = DEFAULT_HTTP_TIMEOUT,
     ) -> None:
         """Matamo tracker plugin.
+
+        Observe that `http_timeout` is ignored if you provide your own http client.
 
         Args:
             app: created with Flask(__name__)
@@ -44,6 +50,7 @@ class Matomo:
             routes_details: a dict of details for routes. Default: None.
             ignored_patterns: list of regexes of routes to ignore. Default: None.
             ignored_ua_patterns: list of regexes of User-Agent to ignore requests. Default: None.
+            http_timeout: timeout to use when calling matomo. Default: 5.
         """  # noqa: E501
         self.activate(
             app=app,
@@ -56,6 +63,7 @@ class Matomo:
             routes_details=routes_details,
             ignored_patterns=ignored_patterns,
             ignored_ua_patterns=ignored_ua_patterns,
+            http_timeout=http_timeout,
         )
 
     @classmethod
@@ -76,8 +84,11 @@ class Matomo:
         routes_details: typing.Optional[dict[str, dict[str, str]]] = None,
         ignored_patterns: typing.Optional[list[str]] = None,
         ignored_ua_patterns: typing.Optional[list[str]] = None,
+        http_timeout: int = DEFAULT_HTTP_TIMEOUT,
     ) -> None:
         """Matamo tracker plugin.
+
+        Observe that `http_timeout` is ignored if you provide your own http client.
 
         Args:
             app: created with Flask(__name__)
@@ -90,6 +101,7 @@ class Matomo:
             routes_details: a dict of details for routes. Default: None.
             ignored_patterns: list of regexes of routes to ignore. Default: None.
             ignored_ua_patterns: list of regexes of User-Agent to ignore requests. Default: None.
+            http_timeout: timeout to use when calling matomo. Default: 5.
         """  # noqa: E501
         if not matomo_url:
             raise ValueError("matomo_url has to be set")
@@ -107,7 +119,7 @@ class Matomo:
             self.ignored_ua_patterns = [re.compile(pattern) for pattern in ignored_ua_patterns]
         self.ignored_routes: list[str] = ignored_routes or []
         self.routes_details: dict[str, dict[str, str]] = routes_details or {}
-        self.client = client or httpx.Client()
+        self.client = client or httpx.Client(timeout=http_timeout)
         self.ignored_patterns = []
         if ignored_patterns:
             self.ignored_patterns = [re.compile(pattern) for pattern in ignored_patterns]

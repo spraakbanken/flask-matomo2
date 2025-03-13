@@ -36,7 +36,12 @@ Simply add `flask-matomo2` to your dependencies:
 dependencies = [
   "flask-matomo2",
 ]
+```
 
+### Using uv
+
+```bash
+uv add flask-matomo2
 ```
 
 ### Using Poetry
@@ -183,6 +188,11 @@ The result is that a request to `/foo` will be tracked as `https://mydomain.com/
 ### Using a custom client
 
 By default, Matomo uses `httpx.Client` to make the tracking call. You can override this by setting `client` as long as the client uses the same api as [`httpx`:s](https://www.python-httpx.org/) `Client`.
+
+### Setting timeout for client requests
+
+By default, Matomo uses a 5 seconds timeout for the client. You can override this timeout by setting `http_timeout`.
+Note that this settings will be ignored if you provide a custom client.
 
 ### Ignoring a route
 
