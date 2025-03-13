@@ -1,6 +1,5 @@
 """The Flask middleware for Matomo tracking."""
 
-import functools
 import json
 import logging
 import random
@@ -265,7 +264,6 @@ class Matomo:
                 return render_template("admin.html")
         """
 
-        @functools.wraps
         def wrap(func: typing.Callable[..., typing.Any]) -> typing.Callable[..., typing.Any]:
             route_name = route or self.guess_route_name(func.__name__)
             self.ignored_routes.append(route_name)
@@ -297,7 +295,6 @@ class Matomo:
                 return jsonify(users=[...])
         """
 
-        @functools.wraps
         def wrap(f: typing.Callable[..., typing.Any]) -> typing.Callable[..., typing.Any]:
             route_details = {}
             if action_name:
