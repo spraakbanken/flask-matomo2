@@ -47,18 +47,12 @@ allow-direct-references = true
 [tool.pyright]
 reportGeneralTypeIssues = "none"
 
-[tool.pdm]
-distribution = true
-
-[tool.pdm.dev-dependencies]
+[dependency-groups]
 dev = [
-    "pytest>=8.0.2",
-    "pytest-cov>=4.1.0",
-    "mypy>=1.8.0",
-    "ruff>=0.5.7",
-    "syrupy>=4.6.1",
-    "bump-my-version>=0.25.4",
+    "bump-my-version>=1.0.2",
+    "mypy>=1.15.0",
+    "pytest>=8.3.5",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.9.10",
+    "syrupy>=4.9.0",
 ]
-
-[tool.pdm.build]
-includes = ["src/flask_matomo2"]
