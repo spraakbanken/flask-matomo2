@@ -1,3 +1,5 @@
+"""Example app using Matomo plugin."""
+
 import logging
 import os
 
@@ -16,15 +18,13 @@ logging.basicConfig(
 
 app = Flask(__name__)
 
-matomo = Matomo(
-    app, matomo_url=MATOMO_URL, id_site=MATOMO_ID_SITE, token_auth=MATOMO_TOKEN
-)
+matomo = Matomo(app, matomo_url=MATOMO_URL, id_site=MATOMO_ID_SITE, token_auth=MATOMO_TOKEN)
 
 
 @app.route("/")
-def home():
+def home():  # noqa: ANN201, D103
     return jsonify({"message": "Hello World"})
 
 
 if __name__ == "__main__":
-    app.run(debug=True)  # noqa: S201
+    app.run(debug=True)
