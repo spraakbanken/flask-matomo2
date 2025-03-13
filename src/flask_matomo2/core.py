@@ -127,7 +127,7 @@ class Matomo:
         """
         app.before_request(self.before_request)
         app.after_request(self.after_request)
-        app.teardown_request(self.teardown_request)
+        app.teardown_request(self.teardown_request_handler())
 
     def before_request(self) -> None:
         """Execute this before every request, parses details about request."""
@@ -200,22 +200,27 @@ class Matomo:
 
         return response
 
-    def teardown_request(self, exc: typing.Optional[Exception] = None) -> None:
-        """Finish tracking and send to Matomo."""
-        tracking_state = g.get("flask_matomo2", {})
-        if not tracking_state.get("tracking", False):
-            return
-        logger.debug("tracking_state=%s", tracking_state)
-        tracking_data = tracking_state["tracking_data"]
-        for key, value in tracking_state.get("custom_tracking_data", {}).items():
-            if key == "cvar" and "cvar" in tracking_data:
-                tracking_data["cvar"].update(value)
-            else:
-                tracking_data[key] = value
-        if exc:
-            tracking_data["ca"] = 1
-            tracking_data["cra"] = str(exc)
-        self.track(tracking_data=tracking_data)
+    def teardown_request_handler(self) -> typing.Callable[[typing.Optional[BaseException]], None]:
+        """Create an request teardown handler."""
+
+        def teardown_request(exc: typing.Optional[BaseException] = None) -> None:
+            """Finish tracking and send to Matomo."""
+            tracking_state = g.get("flask_matomo2", {})
+            if not tracking_state.get("tracking", False):
+                return
+            logger.debug("tracking_state=%s", tracking_state)
+            tracking_data = tracking_state["tracking_data"]
+            for key, value in tracking_state.get("custom_tracking_data", {}).items():
+                if key == "cvar" and "cvar" in tracking_data:
+                    tracking_data["cvar"].update(value)
+                else:
+                    tracking_data[key] = value
+            if exc:
+                tracking_data["ca"] = 1
+                tracking_data["cra"] = str(exc)
+            self.track(tracking_data=tracking_data)
+
+        return teardown_request
 
     def track(
         self,
