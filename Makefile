@@ -57,8 +57,8 @@ help:
 	@echo ""
 
 PLATFORM := `uname -o`
-REPO := "<REPO-NAME-HERE>"
-PROJECT_SRC := "<SRC-FOLDER-HERE>"
+REPO := flask-matomo2
+PROJECT_SRC := src/flask_matomo2
 
 ifeq (${VIRTUAL_ENV},)
   VENV_NAME = .venv
