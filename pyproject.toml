@@ -1,9 +1,11 @@
 [project]
 authors = [
     { name = "Lucas Hild", email = "contact@lucas-hild.de" },
+    { name = "Språkbanken Text", email = "sb-info@svenska.gu.se" },
     { name = "Kristoffer Andersson", email = "kristoffer.andersson@gu.se" },
 ]
 maintainers = [
+    { name = "Språkbanken Text", email = "sb-info@svenska.gu.se" },
     { name = "Kristoffer Andersson", email = "kristoffer.andersson@gu.se" },
 ]
 license = { text = "MIT" }
