@@ -26,7 +26,7 @@ Or when activating the Matomo object:
 Id site *required*
 ------------------
 
-You must also give the `id_site` as an int. 
+You must also give the `id_site` as an int.
 
 This can be given either in the constructor or in the call to `activate`.
 
@@ -34,7 +34,7 @@ Token auth
 ----------
 
 You can optionally give `token_auth` (retrieved from your tracking server), this is required to track
-some information. 
+some information.
 
 This can be given either in the constructor or in the call to `activate`.
 
@@ -53,6 +53,13 @@ You can supply your own http client by setting `client`.
 This must use the same api as `httpx`:s `Client`.
 
 If not supplied a new `httpx.Client` will be created.
+
+Http timeout
+------------
+
+You can override the default timeout (5 seconds) of the client by setting `http_timeout`.
+
+This setting will be ignore if you provide a custom client.
 
 Details about a route
 ---------------------
