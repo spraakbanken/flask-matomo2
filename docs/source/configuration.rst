@@ -127,3 +127,28 @@ You can skip tracking requests made with specific user-agents.
     ...,
     ignored_ua_patterns=[".*bot.*"],
   )
+
+Tracking based on HTTP method
+-----------------------------
+
+You can controll which HTTP methods that should be tracked.
+
+Either by specifing `allow_methods` to allow.
+
+.. code-block:: python
+
+  matomo = Matomo(
+    ...,
+    allowed_methods=["get", "POST"],
+  )
+
+Or `ignored_methods`to ignore specific methods.
+
+.. code-block:: python
+
+  matomo = Matomo(
+    ...,
+    ignored_methods=["OPTIONS"],
+  )
+
+If both `allowed_methods` and `ignored_methods` is given, `ignored_methods` takes presedecnce.

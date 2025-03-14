@@ -48,9 +48,11 @@ def create_app(matomo_client: httpx.Client, settings: dict) -> Flask:
         ignored_routes=["/health"],
         ignored_patterns=[".*/old.*"],
         ignored_ua_patterns=["creepy-bot.*"],
+        allowed_methods=["GET", "PoST", "HEAD", "OPTIONS"],
+        ignored_methods=["OptiOns"],
     )
 
-    @app.route("/foo")
+    @app.route("/foo", methods=("GET", "POST", "PUT"))
     def foo() -> str:
         return "foo"
 
@@ -163,6 +165,22 @@ def test_matomo_client_is_not_called_when_user_agent_should_be_ignored(
     client: httpx.Client, matomo_client: mock.Mock
 ) -> None:
     response = client.get("/foo", headers={"user-agent": "creepy-bot-with-suffix"})
+    assert response.status_code == 200
+
+    matomo_client.post.assert_not_called()
+
+
+def test_matomo_client_is_not_called_when_method_should_be_ignored(
+    client: httpx.Client, matomo_client: mock.Mock
+) -> None:
+    response = client.options("/foo")
+    assert response.status_code == 200
+
+    matomo_client.post.assert_not_called()
+
+
+def test_matomo_client_is_not_called_when_method_is_not_allowed(client: httpx.Client, matomo_client: mock.Mock) -> None:
+    response = client.put("/foo")
     assert response.status_code == 200
 
     matomo_client.post.assert_not_called()
