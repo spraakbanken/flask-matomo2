@@ -290,7 +290,7 @@ if __name__ == "__main__":
 
 ## Meta
 
-Spraakbanken 2023-2024 - [https://spraakbanken.gu.se](https://spraakbanken.gu.se)
+Spraakbanken 2023-2025 - [https://spraakbanken.gu.se](https://spraakbanken.gu.se)
 Lucas Hild (original project `Flask-Matomo`)- [https://lucas-hild.de](https://lucas.hild.de)
 This project is licensed under the MIT License - see the LICENSE file for details
 
