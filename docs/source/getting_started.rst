@@ -73,6 +73,7 @@ In the code above:
 #. All requests made where the User-Agent matches any of the patterns in `ignored_ua_patterns`, will be ignored.
 
 The code can also be written as:
+
 .. code-block:: python
   from flask import Flask, jsonify
   from flask_matomo2 import *
@@ -115,7 +116,7 @@ Sometimes you can't create the `Matomo` object directly, then you can mark as to
     @app.route("/")
     def index():
       return jsonify(route="/")
-    
+
     return app
 
 In this example the matomo object is defined in the file `plugins.py` and can be used by routes defined in other files.
