@@ -27,3 +27,8 @@ parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)"
 serialize = ["{major}.{minor}"]
 search = 'version = "{current_version}"'
 replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "CHANGELOG.md"
+search = "## [unreleased]"
+replace = "## [{new_version}] - {now:%Y-%m-%d}"
