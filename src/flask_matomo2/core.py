@@ -34,6 +34,8 @@ class Matomo:
         ignored_patterns: typing.Optional[list[str]] = None,
         ignored_ua_patterns: typing.Optional[list[str]] = None,
         http_timeout: int = DEFAULT_HTTP_TIMEOUT,
+        allowed_methods: typing.Union[list[str], typing.Literal["all-methods"]] = "all-methods",
+        ignored_methods: typing.Optional[list[str]] = None,
     ) -> None:
         """Matamo tracker plugin.
 
@@ -51,6 +53,8 @@ class Matomo:
             ignored_patterns: list of regexes of routes to ignore. Default: None.
             ignored_ua_patterns: list of regexes of User-Agent to ignore requests. Default: None.
             http_timeout: timeout to use when calling matomo. Default: 5.
+            allowed_methods: list of methods to track or "all-methods". Default: "all-methods".
+            ignored_methods: list of methods to ignore, takes precedence over allowed methods. Default: None.
         """  # noqa: E501
         self.activate(
             app=app,
@@ -64,6 +68,8 @@ class Matomo:
             ignored_patterns=ignored_patterns,
             ignored_ua_patterns=ignored_ua_patterns,
             http_timeout=http_timeout,
+            allowed_methods=allowed_methods,
+            ignored_methods=ignored_methods,
         )
 
     @classmethod
@@ -85,6 +91,8 @@ class Matomo:
         ignored_patterns: typing.Optional[list[str]] = None,
         ignored_ua_patterns: typing.Optional[list[str]] = None,
         http_timeout: int = DEFAULT_HTTP_TIMEOUT,
+        allowed_methods: typing.Union[list[str], typing.Literal["all-methods"]] = "all-methods",
+        ignored_methods: typing.Optional[list[str]] = None,
     ) -> None:
         """Matamo tracker plugin.
 
@@ -102,6 +110,8 @@ class Matomo:
             ignored_patterns: list of regexes of routes to ignore. Default: None.
             ignored_ua_patterns: list of regexes of User-Agent to ignore requests. Default: None.
             http_timeout: timeout to use when calling matomo. Default: 5.
+            allowed_methods: list of methods to track or "all-methods". Default: "all-methods".
+            ignored_methods: list of methods to ignore, takes precedence over allowed methods. Default: None.
         """  # noqa: E501
         if not matomo_url:
             raise ValueError("matomo_url has to be set")
@@ -124,6 +134,13 @@ class Matomo:
         if ignored_patterns:
             self.ignored_patterns = [re.compile(pattern) for pattern in ignored_patterns]
 
+        self.allowed_methods: set[str] = set()
+        if allowed_methods == "all-methods":
+            self.allowed_methods.update("GET", "POST", "HEAD", "OPTIONS", "TRACE", "PUT", "DELETE", "PATCH", "CONNECT")
+        elif allowed_methods:
+            self.allowed_methods.update(method.upper() for method in allowed_methods)
+        {method.upper() for method in allowed_methods} if allowed_methods else set()
+        self.ignored_methods = {method.upper() for method in ignored_methods} if ignored_methods else set()
         if not self.token_auth:
             logger.warning("'token_auth' not given, NOT tracking ip-address")
 
@@ -145,6 +162,8 @@ class Matomo:
         # Don't track track request, if user used ignore() decorator for route
         url_rule = str(request.url_rule)
         if url_rule in self.ignored_routes:
+            return
+        if request.method in self.ignored_methods or request.method not in self.allowed_methods:
             return
         if any(ua_pattern.match(str(request.user_agent)) for ua_pattern in self.ignored_ua_patterns):
             return
