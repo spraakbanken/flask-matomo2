@@ -7,7 +7,7 @@
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 
 [![Maturity badge - level 3](https://img.shields.io/badge/Maturity-Level%203%20--%20Stable-green.svg)](https://github.com/spraakbanken/getting-started/blob/main/scorecard.md)
-[![Stage](https://img.shields.io/pypi/status/sparv-sbx-ocr-correction-viklofg-sweocr)](https://pypi.org/project/flask-matomo2/)
+[![Stage](https://img.shields.io/pypi/status/flask-matomo2)](https://pypi.org/project/flask-matomo2/)
 
 [![Code Coverage](https://codecov.io/gh/spraakbanken/flask-matomo2/branch/main/graph/badge.svg)](https://codecov.io/gh/spraakbanken/flask-matomo2/)
 
