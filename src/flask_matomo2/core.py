@@ -9,6 +9,7 @@ import typing
 
 import flask
 import httpx
+import matomo_core.constants
 from flask import Flask, g, request
 
 logger = logging.getLogger("flask_matomo2")
@@ -136,7 +137,7 @@ class Matomo:
 
         self.allowed_methods: set[str] = set()
         if allowed_methods == "all-methods":
-            self.allowed_methods.update("GET", "POST", "HEAD", "OPTIONS", "TRACE", "PUT", "DELETE", "PATCH", "CONNECT")
+            self.allowed_methods = matomo_core.constants.HTTP_METHODS
         elif allowed_methods:
             self.allowed_methods.update(method.upper() for method in allowed_methods)
 
