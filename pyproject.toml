@@ -12,9 +12,9 @@ license = { text = "MIT" }
 requires-python = ">=3.9"
 dependencies = [
     "flask>=2.3",
- "werkzeug>=2.3.2",
- "httpx>=0.24",
- "matomo-core>=0.2.0",
+    "werkzeug>=2.3.2",
+    "httpx>=0.24",
+    "matomo-core>=0.2.0",
 ]
 name = "flask-matomo2"
 version = "0.6.0"
@@ -62,3 +62,5 @@ dev = [
     "ruff>=0.9.10",
     "syrupy>=4.9.0",
 ]
+[tool.uv.sources]
+matomo-core = { git = "https://github.com/spraakbanken/matomo-core", branch = "add-core" }
