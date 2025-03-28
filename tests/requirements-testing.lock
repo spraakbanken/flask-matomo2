@@ -17,7 +17,7 @@ iniconfig==2.1.0
 itsdangerous==2.2.0
 jinja2==3.1.6
 markupsafe==3.0.2
-matomo-core @ git+https://github.com/spraakbanken/matomo-core@7ce14e8be22aa61ad4d685eea9d2f9a2657907f4
+matomo-core==0.3.0
 mypy==1.15.0
 mypy-extensions==1.0.0
 packaging==24.2

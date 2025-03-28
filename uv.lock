@@ -181,7 +181,7 @@ dev = [
 requires-dist = [
     { name = "flask", specifier = ">=2.3" },
     { name = "httpx", specifier = ">=0.24" },
-    { name = "matomo-core", git = "https://github.com/spraakbanken/matomo-core?branch=add-core" },
+    { name = "matomo-core", specifier = ">=0.3.0" },
     { name = "werkzeug", specifier = ">=2.3.2" },
 ]
 
@@ -352,8 +352,12 @@ wheels = [
 
 [[package]]
 name = "matomo-core"
-version = "0.2.0"
-source = { git = "https://github.com/spraakbanken/matomo-core?branch=add-core#7ce14e8be22aa61ad4d685eea9d2f9a2657907f4" }
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/85/7c/e54769bc0da06d4e2f54d4463742e44536d0f8060db3b2cda48877e0145d/matomo_core-0.3.0.tar.gz", hash = "sha256:d8b5091555fff8ba2d2b8995cfc046d8d90ef8b0f2ef2467de3b73b72c504ab7", size = 31839 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/42/38/acd56989b2be44a2b3abae34a8548aeb02326f1355e983a744aa17569efd/matomo_core-0.3.0-py3-none-any.whl", hash = "sha256:712202431382e4dc91159115d15d3a10d1695121f9caf228443fd4a273ab0698", size = 5624 },
+]
 
 [[package]]
 name = "mypy"
