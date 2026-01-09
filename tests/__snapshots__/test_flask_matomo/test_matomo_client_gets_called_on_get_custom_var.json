@@ -11,6 +11,6 @@
   "rec": "1",
   "send_image": "0",
   "token_auth": "FAKE_TOKEN",
-  "ua": "<UserAgent None/None>",
+  "ua": "python-httpx/0.28.1",
   "url": "http://testserver/set/custom/var"
 }

@@ -1,16 +1,12 @@
 """The Flask middleware for Matomo tracking."""
 
-import json
 import logging
-import random
-import re
-import time
 import typing
 
 import flask
 import httpx
-import matomo_core.constants
 from flask import Flask, g, request
+from matomo_core.core import MatomoCore
 
 logger = logging.getLogger("flask_matomo2")
 
@@ -118,35 +114,28 @@ class Matomo:
             raise ValueError("matomo_url has to be set")
 
         self.app = app
-        # Allow backend url with or without the filename part and/or trailing slash
-        self.matomo_url = (
-            matomo_url if matomo_url.endswith(("/matomo.php", "/piwik.php")) else matomo_url.strip("/") + "/matomo.php"
+        self.matomo_core = MatomoCore(
+            matomo_url=matomo_url,
+            id_site=id_site,
+            token_auth=token_auth,
+            base_url=base_url,
+            ignored_routes=ignored_routes,
+            ignored_methods=ignored_methods,
+            ignored_patterns=ignored_patterns,
+            ignored_ua_patterns=ignored_ua_patterns,
+            routes_details=routes_details,
+            allowed_methods=allowed_methods,
         )
-        self.id_site = id_site
-        self.token_auth = token_auth
-        self.base_url = base_url.strip("/") if base_url else base_url
-        self.ignored_ua_patterns = []
-        if ignored_ua_patterns:
-            self.ignored_ua_patterns = [re.compile(pattern) for pattern in ignored_ua_patterns]
-        self.ignored_routes: list[str] = ignored_routes or []
-        self.routes_details: dict[str, dict[str, str]] = routes_details or {}
+
         self.client = client or httpx.Client(timeout=http_timeout)
-        self.ignored_patterns = []
-        if ignored_patterns:
-            self.ignored_patterns = [re.compile(pattern) for pattern in ignored_patterns]
-
-        self.allowed_methods: set[str] = set()
-        if allowed_methods == "all-methods":
-            self.allowed_methods = matomo_core.constants.HTTP_METHODS
-        elif allowed_methods:
-            self.allowed_methods.update(method.upper() for method in allowed_methods)
-
-        self.ignored_methods = {method.upper() for method in ignored_methods} if ignored_methods else set()
-        if not self.token_auth:
-            logger.warning("'token_auth' not given, NOT tracking ip-address")
 
         if app is not None:
             self.init_app(app)
+
+    @property
+    def matomo_url(self) -> str:
+        """Return the url to matomo for this middleware."""
+        return self.matomo_core.matomo_url
 
     def init_app(self, app: Flask) -> None:
         """Initialize app.
@@ -160,62 +149,17 @@ class Matomo:
 
     def before_request(self) -> None:
         """Execute this before every request, parses details about request."""
-        # Don't track track request, if user used ignore() decorator for route
-        url_rule = str(request.url_rule)
-        if url_rule in self.ignored_routes:
-            return
-        if request.method in self.ignored_methods or request.method not in self.allowed_methods:
-            return
-        if any(ua_pattern.match(str(request.user_agent)) for ua_pattern in self.ignored_ua_patterns):
-            return
-        if any(pattern.match(url_rule) for pattern in self.ignored_patterns):
-            return
-
-        url = self.base_url + request.path if self.base_url else request.url
-        action_name = url_rule if request.url_rule else "Not Found"
-        user_agent = request.user_agent
-        # If request was forwarded (e.g. by a proxy), then get origin IP from
-        # HTTP_X_FORWARDED_FOR. If this header field doesn't exist, return
-        # remote_addr.
-        ip_address = request.environ.get("HTTP_X_FORWARDED_FOR", request.remote_addr)
-
-        data = {
-            # site data
-            "idsite": str(self.id_site),
-            "rec": "1",
-            "apiv": "1",
-            "send_image": "0",
-            # request data
-            "ua": user_agent,
-            "action_name": action_name,
-            "url": url,
-            # "_id": id,
-            "cvar": {
-                "http_status_code": None,
-                "http_method": str(request.method),
-            },
-            # random data
-            "rand": random.getrandbits(32),
-        }
-        if self.token_auth:
-            data["token_auth"] = self.token_auth
-            data["cip"] = ip_address
-
-        if request.accept_languages:
-            data["lang"] = request.accept_languages[0][0]
-
-        if request.referrer:
-            data["urlref"] = request.referrer
-
-        # Overwrite action_name, if it was configured with details()
-        if self.routes_details.get(action_name) and self.routes_details.get(action_name, {}).get("action_name"):
-            data["action_name"] = self.routes_details.get(action_name, {}).get("action_name")
-
-        g.flask_matomo2 = {
-            "tracking": True,
-            "start_ns": time.perf_counter_ns(),
-            "tracking_data": data,
-        }
+        g.flask_matomo2 = self.matomo_core.build_tracking_state(
+            request_url_rule=str(request.url_rule),
+            method=request.method,
+            user_agent=str(request.user_agent),
+            request_path=request.path,
+            request_url=request.url,
+            remote_addr=request.remote_addr,
+            forwarded_for=request.environ.get("HTTP_X_FORWARDED_FOR"),
+            lang=request.accept_languages[0][0] if request.accept_languages else None,
+            referrer=request.referrer,
+        )
 
     @classmethod
     def after_request(cls, response: flask.Response) -> flask.Response:
@@ -224,11 +168,7 @@ class Matomo:
         if not tracking_state.get("tracking", False):
             return response
 
-        end_ns = time.perf_counter_ns()
-        gt_ms = (end_ns - g.flask_matomo2["start_ns"]) / 1000
-        g.flask_matomo2["tracking_data"]["gt_ms"] = gt_ms
-        g.flask_matomo2["tracking_data"]["cvar"]["http_status_code"] = response.status_code
-
+        MatomoCore.track_request_end(status_code=response.status_code, tracking_state=tracking_state)
         return response
 
     def teardown_request_handler(self) -> typing.Callable[[typing.Optional[BaseException]], None]:
@@ -240,15 +180,8 @@ class Matomo:
             if not tracking_state.get("tracking", False):
                 return
             logger.debug("tracking_state=%s", tracking_state)
+            MatomoCore.prepare_tracking_data_for_matomo(tracking_state, exc=exc)
             tracking_data = tracking_state["tracking_data"]
-            for key, value in tracking_state.get("custom_tracking_data", {}).items():
-                if key == "cvar" and "cvar" in tracking_data:
-                    tracking_data["cvar"].update(value)
-                else:
-                    tracking_data[key] = value
-            if exc:
-                tracking_data["ca"] = 1
-                tracking_data["cra"] = repr(exc)
             self.track(tracking_data=tracking_data)
 
         return teardown_request
@@ -263,9 +196,6 @@ class Matomo:
         Args:
             tracking_data: dict of all variables to track
         """
-        if "cvar" in tracking_data:
-            cvar = tracking_data.pop("cvar")
-            tracking_data["cvar"] = json.dumps(cvar)
         logger.debug("calling '%s' with '%s'", self.matomo_url, tracking_data)
         try:
             r = self.client.post(self.matomo_url, data=tracking_data)
@@ -298,7 +228,7 @@ class Matomo:
 
         def wrap(func: typing.Callable[..., typing.Any]) -> typing.Callable[..., typing.Any]:
             route_name = route or self.guess_route_name(func.__name__)
-            self.ignored_routes.append(route_name)
+            self.matomo_core.ignored_routes.append(route_name)
             return func
 
         return wrap
@@ -334,7 +264,7 @@ class Matomo:
 
             if route_details:
                 route_name = route or self.guess_route_name(f.__name__)
-                self.routes_details[route_name] = route_details
+                self.matomo_core.routes_details[route_name] = route_details
             return f
 
         return wrap
