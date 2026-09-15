@@ -1,6 +1,6 @@
 line-length = 120
 
-target-version = "py39"
+target-version = "py310"
 
 [lint]
 select = [
@@ -56,4 +56,4 @@ convention = "google"
 [lint.per-file-ignores]
 "tests/**/*.py" = ["D", "unused-method-argument", "line-too-long", "magic-value-comparison"]
 "docs/source/conf.py" = ["D"]
-"examples/**/*.py" = ["D", "non-empty-init-module"]
+"examples/**/*.py" = ["D", "non-empty-init-module", "missing-type-function-argument"]
