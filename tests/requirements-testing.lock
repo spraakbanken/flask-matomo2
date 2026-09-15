@@ -46,9 +46,6 @@ markupsafe==3.0.2
     #   werkzeug
 matomo-core==0.3.0
     # via flask-matomo2
-mypy==1.15.0
-mypy-extensions==1.0.0
-    # via mypy
 packaging==24.2
     # via pytest
 pluggy==1.5.0
@@ -58,20 +55,17 @@ pytest==8.3.5
     #   pytest-cov
     #   syrupy
 pytest-cov==6.0.0
-ruff==0.11.2
+ruff==0.16.6
 sniffio==1.3.1
     # via anyio
 syrupy==4.9.1
 tomli==2.2.1 ; python_full_version <= '3.11'
     # via
     #   coverage
-    #   mypy
     #   pytest
 ty==0.0.79
-typing-extensions==4.13.0
-    # via
-    #   anyio
-    #   mypy
+typing-extensions==4.13.0 ; python_full_version < '3.13'
+    # via anyio
 werkzeug==3.1.3
     # via
     #   flask
