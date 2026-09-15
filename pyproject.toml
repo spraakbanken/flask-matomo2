@@ -3,7 +3,7 @@ name = "flask-matomo2"
 version = "0.6.0"
 description = "Track requests to your Flask server with Matomo"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = "MIT"
 authors = [
   { name = "Språkbanken Text", email = "sb-info@svenska.gu.se" },
@@ -17,7 +17,6 @@ classifiers = [
   "Environment :: Web Environment",
   "Framework :: Flask",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.9",
@@ -32,7 +31,7 @@ classifiers = [
 dependencies = [
   "flask>=2.3",
   "httpx>=0.24",
-  "matomo-core>=0.3.0",
+  "matomo-core>=0.3.4",
   "werkzeug>=2.3.2",
 ]
 
@@ -52,8 +51,8 @@ dev = [
 ]
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv_build>=0.12.0,<0.13.0"]
+build-backend = "uv_build"
 
 [tool.hatch.metadata]
 allow-direct-references = true
