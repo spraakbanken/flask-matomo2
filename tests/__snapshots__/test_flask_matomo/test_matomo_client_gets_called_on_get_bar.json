@@ -2,7 +2,10 @@
   "action_name": "/bar",
   "apiv": "1",
   "cip": "127.0.0.1",
-  "cvar": "{\"http_status_code\": 500, \"http_method\": \"GET\"}",
+  "cvar": {
+    "http_method": "GET",
+    "http_status_code": 500
+  },
   "gt_ms": "float",
   "idsite": "1",
   "rand": "int",

@@ -1,7 +1,10 @@
 {
   "action_name": "/foo",
   "apiv": "1",
-  "cvar": "{\"http_status_code\": 200, \"http_method\": \"GET\"}",
+  "cvar": {
+    "http_method": "GET",
+    "http_status_code": 200
+  },
   "gt_ms": "float",
   "idsite": "1",
   "rand": "int",

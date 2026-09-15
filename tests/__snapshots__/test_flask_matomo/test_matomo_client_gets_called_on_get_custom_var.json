@@ -2,8 +2,10 @@
   "action_name": "/set/custom/var",
   "apiv": "1",
   "cip": "127.0.0.1",
-  "cvar": "{\"http_status_code\": 200, \"http_method\": \"GET\", \"anything\": \"goes\"}",
-  "e_a": "Playing",
+  "cvar": {
+    "http_method": "GET",
+    "http_status_code": 200
+  },
   "gt_ms": "float",
   "idsite": "1",
   "pf_srv": "float",
