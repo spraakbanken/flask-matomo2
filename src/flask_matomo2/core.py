@@ -52,7 +52,7 @@ class Matomo:
             http_timeout: timeout to use when calling matomo. Default: 5.
             allowed_methods: list of methods to track or "all-methods". Default: "all-methods".
             ignored_methods: list of methods to ignore, takes precedence over allowed methods. Default: None.
-        """  # noqa: E501
+        """  # ruff: ignore[line-too-long]
         self.activate(
             app=app,
             matomo_url=matomo_url,
@@ -109,7 +109,7 @@ class Matomo:
             http_timeout: timeout to use when calling matomo. Default: 5.
             allowed_methods: list of methods to track or "all-methods". Default: "all-methods".
             ignored_methods: list of methods to ignore, takes precedence over allowed methods. Default: None.
-        """  # noqa: E501
+        """  # ruff: ignore[line-too-long]
         if not matomo_url:
             raise ValueError("matomo_url has to be set")
 
@@ -134,7 +134,7 @@ class Matomo:
 
     @property
     def matomo_url(self) -> str:
-        """Return the url to matomo for this middleware."""
+        """The url to matomo for this middleware."""
         return self.matomo_core.matomo_url
 
     def init_app(self, app: Flask) -> None:
@@ -171,7 +171,9 @@ class Matomo:
         MatomoCore.track_request_end(status_code=response.status_code, tracking_state=tracking_state)
         return response
 
-    def teardown_request_handler(self) -> typing.Callable[[typing.Optional[BaseException]], None]:
+    def teardown_request_handler(
+        self,
+    ) -> typing.Callable[[typing.Optional[BaseException]], None]:
         """Create an request teardown handler."""
 
         def teardown_request(exc: typing.Optional[BaseException] = None) -> None:
@@ -200,7 +202,7 @@ class Matomo:
         try:
             r = self.client.post(self.matomo_url, data=tracking_data)
 
-            if r.status_code >= 300:  # noqa: PLR2004
+            if r.status_code >= 300:  # ruff: ignore[magic-value-comparison]
                 logger.error(
                     "Tracking call failed (status_code=%d)",
                     r.status_code,
@@ -226,8 +228,10 @@ class Matomo:
                 return render_template("admin.html")
         """
 
-        def wrap(func: typing.Callable[..., typing.Any]) -> typing.Callable[..., typing.Any]:
-            route_name = route or self.guess_route_name(func.__name__)
+        def wrap(
+            func: typing.Callable[..., typing.Any],
+        ) -> typing.Callable[..., typing.Any]:
+            route_name = route or self.guess_route_name(func.__name__)  # ty: ignore[unresolved-attribute]
             self.matomo_core.ignored_routes.append(route_name)
             return func
 
@@ -257,13 +261,15 @@ class Matomo:
                 return jsonify(users=[...])
         """
 
-        def wrap(f: typing.Callable[..., typing.Any]) -> typing.Callable[..., typing.Any]:
+        def wrap(
+            f: typing.Callable[..., typing.Any],
+        ) -> typing.Callable[..., typing.Any]:
             route_details = {}
             if action_name:
                 route_details["action_name"] = action_name
 
             if route_details:
-                route_name = route or self.guess_route_name(f.__name__)
+                route_name = route or self.guess_route_name(f.__name__)  # ty: ignore[unresolved-attribute]
                 self.matomo_core.routes_details[route_name] = route_details
             return f
 
