@@ -4,7 +4,7 @@ import logging
 import typing
 
 import flask
-import httpx
+import httpx2 as httpx
 from flask import Flask, g, request
 from matomo_core.core import MatomoCore
 
@@ -229,7 +229,9 @@ class Matomo:
         def wrap(
             func: typing.Callable[..., typing.Any],
         ) -> typing.Callable[..., typing.Any]:
-            route_name = route or self.guess_route_name(func.__name__)  # ty: ignore[unresolved-attribute]
+            route_name = route or self.guess_route_name(
+                func.__name__  # ty: ignore[unresolved-attribute]
+            )
             self.matomo_core.ignored_routes.append(route_name)
             return func
 
@@ -267,7 +269,9 @@ class Matomo:
                 route_details["action_name"] = action_name
 
             if route_details:
-                route_name = route or self.guess_route_name(f.__name__)  # ty: ignore[unresolved-attribute]
+                route_name = route or self.guess_route_name(
+                    f.__name__  # ty: ignore[unresolved-attribute]
+                )
                 self.matomo_core.routes_details[route_name] = route_details
             return f
 

@@ -2,14 +2,7 @@
 name = "simple-app"
 version = "0.1.0"
 description = "Simple app example for using flask-matomo2"
-authors = [
-    { name = "Kristoffer Andersson", email = "kristoffer.andersson@gu.se" },
-]
-dependencies = ["flask-matomo2>=0.3.0"]
-requires-python = ">=3.9"
 readme = "README.md"
-license = { text = "MIT" }
-
-
-[tool.pdm]
-distribution = false
+requires-python = ">=3.9"
+license = "MIT"
+dependencies = ["flask-matomo2>=0.3.0"]
