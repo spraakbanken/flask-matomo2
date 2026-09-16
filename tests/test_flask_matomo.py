@@ -129,7 +129,7 @@ def fixture_client_wo_token(
         yield client
 
 
-def make_matcher():  # ruff: ignore[missing-return-type-undocumented-public-function]
+def make_matcher() -> "matchers.PropertyMatcher":
     return matchers.path_type({"gt_ms": (float,), "rand": (int,), "ua": (str,)})
 
 
