@@ -63,17 +63,16 @@ from flask import Flask, jsonify
 from flask_matomo2 import Matomo
 
 app = Flask(__name__)
-matomo = Matomo(
-    app, 
-    matomo_url="https://matomo.mydomain.com",
-    id_site=5, token_auth="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+matomo = Matomo(app, matomo_url="https://matomo.mydomain.com", id_site=5, token_auth="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+
 
 @app.route("/")
 def index():
-  return jsonify({"page": "index"})
+    return jsonify({"page": "index"})
+
 
 if __name__ == "__main__":
-  app.run()
+    app.run()
 ```
 
 In the code above:
@@ -91,19 +90,19 @@ You can provide details to a route in 2 ways, first by using the `matomo.details
 from flask import Flask, jsonify
 from flask_matomo2 import Matomo
 
-matomo = Matomo(
-    matomo_url="https://matomo.mydomain.com",
-    id_site=5, token_auth="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+matomo = Matomo(matomo_url="https://matomo.mydomain.com", id_site=5, token_auth="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
 app = Flask(__name__)
 matomo.init_app(app)
+
 
 @app.route("/foo")
 @matomo.details(action_name="Foo")
 def foo():
-  return jsonify({"page": "foo"})
+    return jsonify({"page": "foo"})
+
 
 if __name__ == "__main__":
-  app.run()
+    app.run()
 ```
 
 Here the `Matomo` object is created before the `Flask` object and then calling `init_app`.
@@ -115,23 +114,21 @@ from flask_matomo2 import Matomo
 
 app = Flask(__name__)
 matomo = Matomo(
-  app,
-  matomo_url="https://matomo.mydomain.com",
-  id_site=5,
-  token_auth="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-  routes_details={
-    "/foo": {
-      "action_name": "Foo"
-    }
-  }
+    app,
+    matomo_url="https://matomo.mydomain.com",
+    id_site=5,
+    token_auth="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    routes_details={"/foo": {"action_name": "Foo"}},
 )
+
 
 @app.route("/foo")
 def foo():
-  return jsonify({"page": "foo"})
+    return jsonify({"page": "foo"})
+
 
 if __name__ == "__main__":
-  app.run()
+    app.run()
 ```
 
 ### Adjusting the tracked url
@@ -142,20 +139,19 @@ If your app is behind a proxy and you don't adjust the url in any other way, you
 from flask import Flask, jsonify
 from flask_matomo2 import Matomo
 
-matomo = Matomo(
-    matomo_url="https://matomo.mydomain.com",
-    id_site=5,
-    base_url="https://mydomain.com/apps")
+matomo = Matomo(matomo_url="https://matomo.mydomain.com", id_site=5, base_url="https://mydomain.com/apps")
 app = Flask(__name__)
 matomo.init_app(app)
+
 
 @app.route("/foo")
 @matomo.details(action_name="Foo")
 def foo():
-  return jsonify({"page": "foo"})
+    return jsonify({"page": "foo"})
+
 
 if __name__ == "__main__":
-  app.run()
+    app.run()
 ```
 
 Or a call to `activate`:
@@ -166,21 +162,19 @@ from flask_matomo2 import Matomo
 
 matomo = Matomo.activate_later()
 
-matomo.activate(
-    matomo_url="https://matomo.mydomain.com",
-    id_site=5, 
-    base_url="https://mydomain.com/apps"
-)
+matomo.activate(matomo_url="https://matomo.mydomain.com", id_site=5, base_url="https://mydomain.com/apps")
 app = Flask(__name__)
 matomo.init_app(app)
+
 
 @app.route("/foo")
 @matomo.details(action_name="Foo")
 def foo():
-  return jsonify({"page": "foo"})
+    return jsonify({"page": "foo"})
+
 
 if __name__ == "__main__":
-  app.run()
+    app.run()
 ```
 
 The result is that a request to `/foo` will be tracked as `https://mydomain.com/apps/foo`.
@@ -209,13 +203,15 @@ matomo = Matomo(
 app = Flask(__name__)
 matomo.init_app(app)
 
+
 @app.route("/foo")
 @matomo.ignore()
 def foo():
-  return jsonify({"page": "foo"})
+    return jsonify({"page": "foo"})
+
 
 if __name__ == "__main__":
-  app.run()
+    app.run()
 ```
 
 Or ignore the route in the matomo constructor:
@@ -224,20 +220,18 @@ Or ignore the route in the matomo constructor:
 from flask import Flask, jsonify
 from flask_matomo2 import Matomo
 
-matomo = Matomo(
-    matomo_url="https://matomo.mydomain.com",
-    id_site=5,
-    ignored_routes=["/foo"]
-)
+matomo = Matomo(matomo_url="https://matomo.mydomain.com", id_site=5, ignored_routes=["/foo"])
 app = Flask(__name__)
 matomo.init_app(app)
 
+
 @app.route("/foo")
 def foo():
-  return jsonify({"page": "foo"})
+    return jsonify({"page": "foo"})
+
 
 if __name__ == "__main__":
-  app.run()
+    app.run()
 ```
 
 ### Ignore routes by patterns
@@ -248,20 +242,18 @@ You can also ignore routes by giving a list of regexes to the constructor:
 from flask import Flask, jsonify
 from flask_matomo2 import Matomo
 
-matomo = Matomo(
-    matomo_url="https://matomo.mydomain.com",
-    id_site=5,
-    ignored_patterns=["/fo.*"]
-)
+matomo = Matomo(matomo_url="https://matomo.mydomain.com", id_site=5, ignored_patterns=["/fo.*"])
 app = Flask(__name__)
 matomo.init_app(app)
 
+
 @app.route("/foo")
 def foo():
-  return jsonify({"page": "foo"})
+    return jsonify({"page": "foo"})
+
 
 if __name__ == "__main__":
-  app.run()
+    app.run()
 ```
 
 ### Ignore requests by User-Agent patterns
@@ -272,20 +264,18 @@ You can supply regex patterns to ignore request based on User-Agent:
 from flask import Flask, jsonify
 from flask_matomo2 import Matomo
 
-matomo = Matomo(
-    matomo_url="https://matomo.mydomain.com",
-    id_site=5,
-    ignored_ua_patterns=[".*bot.*"]
-)
+matomo = Matomo(matomo_url="https://matomo.mydomain.com", id_site=5, ignored_ua_patterns=[".*bot.*"])
 app = Flask(__name__)
 matomo.init_app(app)
 
+
 @app.route("/foo")
 def foo():
-  return jsonify({"page": "foo"})
+    return jsonify({"page": "foo"})
+
 
 if __name__ == "__main__":
-  app.run()
+    app.run()
 ```
 
 ## Meta
