@@ -10,13 +10,13 @@ colorama==0.4.6 ; sys_platform == 'win32'
     # via
     #   click
     #   pytest
-coverage==7.7.1
+coverage==7.16.0
     # via pytest-cov
 exceptiongroup==1.2.2 ; python_full_version < '3.11'
     # via
     #   anyio
     #   pytest
-flask==3.1.0
+flask==3.1.3
     # via flask-matomo2
 h11==0.16.0 ; sys_platform != 'emscripten'
     # via httpcore2
@@ -38,6 +38,7 @@ jinja2==3.1.6
     # via flask
 markupsafe==3.0.2
     # via
+    #   flask
     #   jinja2
     #   werkzeug
 matomo-core==0.3.4
@@ -45,14 +46,16 @@ matomo-core==0.3.4
 packaging==24.2
     # via pytest
 pluggy==1.5.0
-    # via pytest
+    # via
+    #   pytest
+    #   pytest-cov
 pygments==2.21.0
     # via pytest
 pytest==9.1.1
     # via
     #   pytest-cov
     #   syrupy
-pytest-cov==6.0.0
+pytest-cov==7.1.0
 ruff==0.16.6
 syrupy==6.0.0
 tomli==2.2.1 ; python_full_version <= '3.11'
@@ -69,7 +72,7 @@ typing-extensions==4.16.0
     #   anyio
     #   httpx2
     #   matomo-core
-werkzeug==3.1.3
+werkzeug==3.1.6
     # via
     #   flask
     #   flask-matomo2
