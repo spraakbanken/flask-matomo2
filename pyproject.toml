@@ -60,3 +60,6 @@ allow-direct-references = true
 
 [tool.pyright]
 reportGeneralTypeIssues = "none"
+
+[tool.uv]
+exclude-newer = "P7D"
