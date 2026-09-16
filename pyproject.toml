@@ -35,10 +35,11 @@ dependencies = [
 ]
 
 [project.urls]
-"Bug Tracker" = "https://github.com/spraakbanken/flask-matomo2/issues"
-documentation = "http://flask-matomo2.readthedocs.io/"
-homepage = "https://spraakbanken.gu.se"
-repository = "https://github.com/spraakbanken/flask-matomo2"
+Changelog = "https://github.com/spraakbanken/flask-matomo2/blob/main/CHANGELOG.md"
+Documentation = "http://flask-matomo2.readthedocs.io/"
+Homepage = "https://spraakbanken.gu.se"
+Issues = "https://github.com/spraakbanken/flask-matomo2/issues"
+Repository = "https://github.com/spraakbanken/flask-matomo2"
 
 [dependency-groups]
 dev = [
