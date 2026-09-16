@@ -174,7 +174,7 @@ dev = [
 requires-dist = [
     { name = "flask", specifier = ">=2.3" },
     { name = "httpx", specifier = ">=0.24" },
-    { name = "matomo-core", specifier = ">=0.3.0" },
+    { name = "matomo-core", specifier = ">=0.3.4" },
     { name = "werkzeug", specifier = ">=2.3.2" },
 ]
 
@@ -323,11 +323,14 @@ wheels = [
 
 [[package]]
 name = "matomo-core"
-version = "0.3.0"
+version = "0.3.4"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/85/7c/e54769bc0da06d4e2f54d4463742e44536d0f8060db3b2cda48877e0145d/matomo_core-0.3.0.tar.gz", hash = "sha256:d8b5091555fff8ba2d2b8995cfc046d8d90ef8b0f2ef2467de3b73b72c504ab7", size = 31839, upload-time = "2025-03-28T14:31:30.751Z" }
+dependencies = [
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e1/b6/40cb900418a13b57408647df900ab3deae9941226b8edd4d91a33630401f/matomo_core-0.3.4.tar.gz", hash = "sha256:943744d84cd123e35a94131513d4de0498ad74d315046f7999e262f90273755b", size = 4522, upload-time = "2026-06-12T13:56:43.771Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/42/38/acd56989b2be44a2b3abae34a8548aeb02326f1355e983a744aa17569efd/matomo_core-0.3.0-py3-none-any.whl", hash = "sha256:712202431382e4dc91159115d15d3a10d1695121f9caf228443fd4a273ab0698", size = 5624, upload-time = "2025-03-28T14:31:29.504Z" },
+    { url = "https://files.pythonhosted.org/packages/24/45/e948d35c2d13aecdee26db81dc33c73199387c4a69e3b56c3e5168a0ebbe/matomo_core-0.3.4-py3-none-any.whl", hash = "sha256:3edc831e7f277e86015856319a183d695f45e8c8f0d004c39a43761e06df844d", size = 5876, upload-time = "2026-06-12T13:56:42.677Z" },
 ]
 
 [[package]]
@@ -490,11 +493,11 @@ wheels = [
 
 [[package]]
 name = "typing-extensions"
-version = "4.13.0"
+version = "4.16.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/0e/3e/b00a62db91a83fff600de219b6ea9908e6918664899a2d85db222f4fbf19/typing_extensions-4.13.0.tar.gz", hash = "sha256:0a4ac55a5820789d87e297727d229866c9650f6521b64206413c4fbada24d95b", size = 106520, upload-time = "2025-03-26T03:49:41.628Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/cc/6253133b5bb138fc3306cebfbda2c520f545d36b5be2c7255cc528bb45d6/typing_extensions-4.16.0.tar.gz", hash = "sha256:dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5", size = 113555, upload-time = "2026-07-02T08:40:05.92Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e0/86/39b65d676ec5732de17b7e3c476e45bb80ec64eb50737a8dce1a4178aba1/typing_extensions-4.13.0-py3-none-any.whl", hash = "sha256:c8dd92cc0d6425a97c18fbb9d1954e5ff92c1ca881a309c45f06ebc0b79058e5", size = 45683, upload-time = "2025-03-26T03:49:40.35Z" },
+    { url = "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl", hash = "sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8", size = 45571, upload-time = "2026-07-02T08:40:04.659Z" },
 ]
 
 [[package]]
