@@ -19,20 +19,20 @@ class Matomo:
 
     def __init__(
         self,
-        app: typing.Optional[Flask] = None,
+        app: Flask | None = None,
         *,
         matomo_url: str,
-        id_site: typing.Optional[int] = None,
-        token_auth: typing.Optional[str] = None,
-        base_url: typing.Optional[str] = None,
-        client: typing.Optional[httpx.Client] = None,
-        ignored_routes: typing.Optional[list[str]] = None,
-        routes_details: typing.Optional[dict[str, dict[str, str]]] = None,
-        ignored_patterns: typing.Optional[list[str]] = None,
-        ignored_ua_patterns: typing.Optional[list[str]] = None,
+        id_site: int | None = None,
+        token_auth: str | None = None,
+        base_url: str | None = None,
+        client: httpx.Client | None = None,
+        ignored_routes: list[str] | None = None,
+        routes_details: dict[str, dict[str, str]] | None = None,
+        ignored_patterns: list[str] | None = None,
+        ignored_ua_patterns: list[str] | None = None,
         http_timeout: int = DEFAULT_HTTP_TIMEOUT,
-        allowed_methods: typing.Union[list[str], typing.Literal["all-methods"]] = "all-methods",
-        ignored_methods: typing.Optional[list[str]] = None,
+        allowed_methods: list[str] | typing.Literal["all-methods"] = "all-methods",
+        ignored_methods: list[str] | None = None,
     ) -> None:
         """Matamo tracker plugin.
 
@@ -76,20 +76,20 @@ class Matomo:
 
     def activate(
         self,
-        app: typing.Optional[Flask] = None,
+        app: Flask | None = None,
         *,
         matomo_url: str,
-        id_site: typing.Optional[int] = None,
-        token_auth: typing.Optional[str] = None,
-        base_url: typing.Optional[str] = None,
-        client: typing.Optional[httpx.Client] = None,
-        ignored_routes: typing.Optional[list[str]] = None,
-        routes_details: typing.Optional[dict[str, dict[str, str]]] = None,
-        ignored_patterns: typing.Optional[list[str]] = None,
-        ignored_ua_patterns: typing.Optional[list[str]] = None,
+        id_site: int | None = None,
+        token_auth: str | None = None,
+        base_url: str | None = None,
+        client: httpx.Client | None = None,
+        ignored_routes: list[str] | None = None,
+        routes_details: dict[str, dict[str, str]] | None = None,
+        ignored_patterns: list[str] | None = None,
+        ignored_ua_patterns: list[str] | None = None,
         http_timeout: int = DEFAULT_HTTP_TIMEOUT,
-        allowed_methods: typing.Union[list[str], typing.Literal["all-methods"]] = "all-methods",
-        ignored_methods: typing.Optional[list[str]] = None,
+        allowed_methods: list[str] | typing.Literal["all-methods"] = "all-methods",
+        ignored_methods: list[str] | None = None,
     ) -> None:
         """Matamo tracker plugin.
 
@@ -171,10 +171,10 @@ class Matomo:
         MatomoCore.track_request_end(status_code=response.status_code, tracking_state=tracking_state)
         return response
 
-    def teardown_request_handler(self) -> typing.Callable[[typing.Optional[BaseException]], None]:
+    def teardown_request_handler(self) -> typing.Callable[[BaseException | None], None]:
         """Create an request teardown handler."""
 
-        def teardown_request(exc: typing.Optional[BaseException] = None) -> None:
+        def teardown_request(exc: BaseException | None = None) -> None:
             """Finish tracking and send to Matomo."""
             tracking_state = g.get("flask_matomo2", {})
             if not tracking_state.get("tracking", False):
@@ -211,7 +211,7 @@ class Matomo:
             logger.exception("Tracking call failed:", extra={"exc": exc})
             logger.exception(exc)
 
-    def ignore(self, route: typing.Optional[str] = None) -> typing.Callable[..., typing.Callable[..., typing.Any]]:
+    def ignore(self, route: str | None = None) -> typing.Callable[..., typing.Callable[..., typing.Any]]:
         """Ignore a route and don't track it.
 
         If the route has a different name than the function you must specify the 'route'.
@@ -240,9 +240,9 @@ class Matomo:
 
     def details(
         self,
-        route: typing.Optional[str] = None,
+        route: str | None = None,
         *,
-        action_name: typing.Optional[str] = None,
+        action_name: str | None = None,
     ) -> typing.Callable[..., typing.Any]:
         """Set details like action_name for a route.
 
