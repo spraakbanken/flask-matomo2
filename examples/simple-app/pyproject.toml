@@ -3,6 +3,6 @@ name = "simple-app"
 version = "0.1.0"
 description = "Simple app example for using flask-matomo2"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = "MIT"
 dependencies = ["flask-matomo2>=0.3.0"]

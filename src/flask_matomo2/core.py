@@ -1,7 +1,7 @@
 """The Flask middleware for Matomo tracking."""
 
 import logging
-import typing
+import typing as t
 
 import flask
 import httpx2 as httpx
@@ -31,7 +31,7 @@ class Matomo:
         ignored_patterns: list[str] | None = None,
         ignored_ua_patterns: list[str] | None = None,
         http_timeout: int = DEFAULT_HTTP_TIMEOUT,
-        allowed_methods: list[str] | typing.Literal["all-methods"] = "all-methods",
+        allowed_methods: list[str] | t.Literal["all-methods"] = "all-methods",
         ignored_methods: list[str] | None = None,
     ) -> None:
         """Matamo tracker plugin.
@@ -88,7 +88,7 @@ class Matomo:
         ignored_patterns: list[str] | None = None,
         ignored_ua_patterns: list[str] | None = None,
         http_timeout: int = DEFAULT_HTTP_TIMEOUT,
-        allowed_methods: list[str] | typing.Literal["all-methods"] = "all-methods",
+        allowed_methods: list[str] | t.Literal["all-methods"] = "all-methods",
         ignored_methods: list[str] | None = None,
     ) -> None:
         """Matamo tracker plugin.
@@ -171,7 +171,7 @@ class Matomo:
         MatomoCore.track_request_end(status_code=response.status_code, tracking_state=tracking_state)
         return response
 
-    def teardown_request_handler(self) -> typing.Callable[[BaseException | None], None]:
+    def teardown_request_handler(self) -> t.Callable[[BaseException | None], None]:
         """Create an request teardown handler."""
 
         def teardown_request(exc: BaseException | None = None) -> None:
@@ -189,7 +189,7 @@ class Matomo:
     def track(
         self,
         *,
-        tracking_data: dict[str, typing.Any],
+        tracking_data: dict[str, t.Any],
     ) -> None:
         """Send request to Matomo.
 
@@ -211,7 +211,7 @@ class Matomo:
             logger.exception("Tracking call failed:", extra={"exc": exc})
             logger.exception(exc)
 
-    def ignore(self, route: str | None = None) -> typing.Callable[..., typing.Callable[..., typing.Any]]:
+    def ignore(self, route: str | None = None) -> t.Callable[..., t.Callable[..., t.Any]]:
         """Ignore a route and don't track it.
 
         If the route has a different name than the function you must specify the 'route'.
@@ -227,8 +227,8 @@ class Matomo:
         """
 
         def wrap(
-            func: typing.Callable[..., typing.Any],
-        ) -> typing.Callable[..., typing.Any]:
+            func: t.Callable[..., t.Any],
+        ) -> t.Callable[..., t.Any]:
             route_name = route or self.guess_route_name(
                 func.__name__  # ty: ignore[unresolved-attribute]
             )
@@ -247,7 +247,7 @@ class Matomo:
         route: str | None = None,
         *,
         action_name: str | None = None,
-    ) -> typing.Callable[..., typing.Any]:
+    ) -> t.Callable[..., t.Any]:
         """Set details like action_name for a route.
 
         Args:
@@ -262,8 +262,8 @@ class Matomo:
         """
 
         def wrap(
-            f: typing.Callable[..., typing.Any],
-        ) -> typing.Callable[..., typing.Any]:
+            f: t.Callable[..., t.Any],
+        ) -> t.Callable[..., t.Any]:
             route_details = {}
             if action_name:
                 route_details["action_name"] = action_name
