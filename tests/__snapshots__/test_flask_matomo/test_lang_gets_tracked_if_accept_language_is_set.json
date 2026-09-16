@@ -13,6 +13,6 @@
   "rec": "1",
   "send_image": "0",
   "token_auth": "FAKE_TOKEN",
-  "ua": "python-httpx2/2.12.0",
+  "ua": "str",
   "url": "http://testserver/foo"
 }
