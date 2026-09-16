@@ -154,10 +154,12 @@ def test_matomo_url_works_with_or_without_trailing_slash_or_filename(in_url: str
 
 
 def test_matomo_client_gets_called_on_get_foo(
-    client: httpx.Client, matomo_client: mock.Mock, snapshot_json: SnapshotAssertion
+    client: httpx.Client,
+    matomo_client: mock.Mock,
+    snapshot_json: SnapshotAssertion,
 ) -> None:
     response = client.get("/foo")
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_called()
 
@@ -165,26 +167,28 @@ def test_matomo_client_gets_called_on_get_foo(
 
 
 def test_matomo_client_is_not_called_when_user_agent_should_be_ignored(
-    client: httpx.Client, matomo_client: mock.Mock
+    client: httpx.Client,
+    matomo_client: mock.Mock,
 ) -> None:
     response = client.get("/foo", headers={"user-agent": "creepy-bot-with-suffix"})
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_not_called()
 
 
 def test_matomo_client_is_not_called_when_method_should_be_ignored(
-    client: httpx.Client, matomo_client: mock.Mock
+    client: httpx.Client,
+    matomo_client: mock.Mock,
 ) -> None:
     response = client.options("/foo")
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_not_called()
 
 
 def test_matomo_client_is_not_called_when_method_is_not_allowed(client: httpx.Client, matomo_client: mock.Mock) -> None:
     response = client.put("/foo")
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_not_called()
 
@@ -195,7 +199,7 @@ def test_middleware_works_without_token(
     snapshot_json: SnapshotAssertion,
 ) -> None:
     response = client_wo_token.get("/foo")
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_called()  # get.assert_called()
 
@@ -208,7 +212,7 @@ def test_lang_gets_tracked_if_accept_language_is_set(
     snapshot_json: SnapshotAssertion,
 ) -> None:
     response = client.get("/foo", headers={"accept-language": "sv"})
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_called()  # get.assert_called()
 
@@ -216,11 +220,13 @@ def test_lang_gets_tracked_if_accept_language_is_set(
 
 
 def test_x_forwarded_for_changes_ip(
-    client: httpx.Client, matomo_client: mock.Mock, snapshot_json: SnapshotAssertion
+    client: httpx.Client,
+    matomo_client: mock.Mock,
+    snapshot_json: SnapshotAssertion,
 ) -> None:
     forwarded_ip = "127.0.0.2"
     response = client.get("/foo", headers={"x-forwarded-for": forwarded_ip})
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_called()  # get.assert_called()
 
@@ -232,7 +238,7 @@ def test_matomo_client_doesnt_gets_called_on_get_health(
     matomo_client: mock.Mock,
 ) -> None:
     response = client.get("/health")
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
     matomo_client.post.assert_not_called()
 
 
@@ -241,16 +247,18 @@ def test_matomo_client_doesnt_gets_called_on_get_heartbeat(
     matomo_client: mock.Mock,
 ) -> None:
     response = client.get("/heartbeat")
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_not_called()
 
 
 def test_matomo_details_updates_action_name(
-    client: httpx.Client, matomo_client: mock.Mock, snapshot_json: SnapshotAssertion
+    client: httpx.Client,
+    matomo_client: mock.Mock,
+    snapshot_json: SnapshotAssertion,
 ) -> None:
     response = client.get("/bor")
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_called()  # get.assert_called()
 
@@ -260,7 +268,7 @@ def test_matomo_details_updates_action_name(
 @pytest.mark.parametrize("path", ["/some/old/path", "/old/path", "/really/old"])
 def test_matomo_client_doesnt_gets_called_on_get_old(client: httpx.Client, matomo_client: mock.Mock, path: str) -> None:
     response = client.get(path)
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
     matomo_client.post.assert_not_called()
 
 
@@ -270,7 +278,7 @@ def test_matomo_client_gets_called_on_get_custom_var(
     snapshot_json: SnapshotAssertion,
 ) -> None:
     response = client.get("/set/custom/var")
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_called()
 
@@ -282,7 +290,7 @@ def test_api_works_even_if_tracking_fails(client: httpx.Client, matomo_client: m
     matomo_client.post = mock.Mock(return_value=Response(status_code=500))
     response = client.get("/foo")
 
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_called()
 
@@ -291,16 +299,18 @@ def test_app_works_even_if_tracking_raises(client: httpx.Client, matomo_client: 
     matomo_client.post = mock.Mock(side_effect=httpx.HTTPError("custom"))
     response = client.get("/foo")
 
-    assert response.status_code == 200
+    assert response.status_code == httpx.codes.OK
 
     matomo_client.post.assert_called()
 
 
 def test_matomo_client_gets_called_on_get_bar(
-    client: httpx.Client, matomo_client: mock.Mock, snapshot_json: SnapshotAssertion
+    client: httpx.Client,
+    matomo_client: mock.Mock,
+    snapshot_json: SnapshotAssertion,
 ) -> None:
     response = client.get("/bar")
-    assert response.status_code >= 500
+    assert response.status_code >= httpx.codes.INTERNAL_SERVER_ERROR
 
     matomo_client.post.assert_called()
     assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(matcher=make_matcher())

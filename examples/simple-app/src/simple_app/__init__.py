@@ -7,7 +7,7 @@ from flask import Flask, jsonify
 
 from flask_matomo2 import Matomo
 
-MATOMO_URL = os.environ.get("MATOMO_URL", None)
+MATOMO_URL = os.environ.get("MATOMO_URL", "NOT SET")
 MATOMO_ID_SITE = os.environ.get("MATOMO_ID_SITE", None)
 MATOMO_TOKEN = os.environ.get("MATOMO_TOKEN", None)
 
@@ -22,7 +22,7 @@ matomo = Matomo(app, matomo_url=MATOMO_URL, id_site=MATOMO_ID_SITE, token_auth=M
 
 
 @app.route("/")
-def home():  # ruff: ignore[missing-return-type-undocumented-public-function]
+def home():
     return jsonify({"message": "Hello World"})
 
 

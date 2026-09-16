@@ -52,7 +52,7 @@ class Matomo:
             http_timeout: timeout to use when calling matomo. Default: 5.
             allowed_methods: list of methods to track or "all-methods". Default: "all-methods".
             ignored_methods: list of methods to ignore, takes precedence over allowed methods. Default: None.
-        """  # ruff: ignore[line-too-long]
+        """  # noqa: E501
         self.activate(
             app=app,
             matomo_url=matomo_url,
@@ -109,7 +109,7 @@ class Matomo:
             http_timeout: timeout to use when calling matomo. Default: 5.
             allowed_methods: list of methods to track or "all-methods". Default: "all-methods".
             ignored_methods: list of methods to ignore, takes precedence over allowed methods. Default: None.
-        """  # ruff: ignore[line-too-long]
+        """  # noqa: E501
         if not matomo_url:
             raise ValueError("matomo_url has to be set")
 
@@ -200,7 +200,7 @@ class Matomo:
         try:
             r = self.client.post(self.matomo_url, data=tracking_data)
 
-            if r.status_code >= 300:  # ruff: ignore[magic-value-comparison]
+            if r.status_code >= httpx.codes.BAD_REQUEST:
                 logger.error(
                     "Tracking call failed (status_code=%d)",
                     r.status_code,
@@ -230,7 +230,7 @@ class Matomo:
             func: t.Callable[..., t.Any],
         ) -> t.Callable[..., t.Any]:
             route_name = route or self.guess_route_name(
-                func.__name__  # ty: ignore[unresolved-attribute]
+                func.__name__,  # ty: ignore[unresolved-attribute]
             )
             self.matomo_core.ignored_routes.append(route_name)
             return func
@@ -270,7 +270,7 @@ class Matomo:
 
             if route_details:
                 route_name = route or self.guess_route_name(
-                    f.__name__  # ty: ignore[unresolved-attribute]
+                    f.__name__,  # ty: ignore[unresolved-attribute]
                 )
                 self.matomo_core.routes_details[route_name] = route_details
             return f
