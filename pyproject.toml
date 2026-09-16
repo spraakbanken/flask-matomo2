@@ -42,7 +42,6 @@ repository = "https://github.com/spraakbanken/flask-matomo2"
 
 [dependency-groups]
 dev = [
-  "mypy>=1.15.0",
   "pytest>=8.3.5",
   "pytest-cov>=6.0.0",
   "ruff>=0.9.10",
