@@ -10,6 +10,6 @@
   "rand": "int",
   "rec": "1",
   "send_image": "0",
-  "ua": "python-httpx/0.28.1",
+  "ua": "python-httpx2/2.12.0",
   "url": "http://testserver/foo"
 }

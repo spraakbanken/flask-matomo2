@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from unittest import mock
 
 import flask
-import httpx
+import httpx2 as httpx
 import pytest
 from flask import Flask
 from syrupy import matchers
