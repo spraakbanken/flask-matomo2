@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-yaml
       - id: check-json
@@ -21,7 +21,7 @@ repos:
       # Run the formatter.
       - id: ruff-format
   - repo: https://github.com/crate-ci/committed
-    rev: v1.1.7
+    rev: v1.1.11
     hooks:
       - id: committed
         stages: [commit-msg]
