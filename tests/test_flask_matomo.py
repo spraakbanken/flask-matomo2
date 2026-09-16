@@ -113,9 +113,7 @@ def fixture_app_wo_token(matomo_client: httpx.Client, settings: dict) -> Flask:
 
 @pytest.fixture(name="client")
 def fixture_client(app: Flask) -> typing.Generator[httpx.Client, None, None]:
-    with httpx.Client(
-        transport=httpx.WSGITransport(app=app), base_url="http://testserver"
-    ) as client:
+    with httpx.Client(transport=httpx.WSGITransport(app=app), base_url="http://testserver") as client:
         yield client
 
 
@@ -123,9 +121,7 @@ def fixture_client(app: Flask) -> typing.Generator[httpx.Client, None, None]:
 def fixture_client_wo_token(
     app_wo_token: Flask,
 ) -> typing.Generator[httpx.Client, None, None]:
-    with httpx.Client(
-        transport=httpx.WSGITransport(app=app_wo_token), base_url="http://testserver"
-    ) as client:
+    with httpx.Client(transport=httpx.WSGITransport(app=app_wo_token), base_url="http://testserver") as client:
         yield client
 
 
@@ -140,9 +136,7 @@ def test_matomo_client_sets_urlref_if_referer_exists(
 ) -> None:
     _response = client.get("/foo", headers={"Referer": "http://example.com"})
 
-    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(
-        matcher=make_matcher()
-    )
+    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(matcher=make_matcher())
 
 
 @pytest.mark.parametrize(
@@ -154,9 +148,7 @@ def test_matomo_client_sets_urlref_if_referer_exists(
         ("http://trackingserver/piwik.php", "http://trackingserver/piwik.php"),
     ],
 )
-def test_matomo_url_works_with_or_without_trailing_slash_or_filename(
-    in_url: str, stored_url: str
-) -> None:
+def test_matomo_url_works_with_or_without_trailing_slash_or_filename(in_url: str, stored_url: str) -> None:
     matomo = Matomo(matomo_url=in_url)
     assert matomo.matomo_url == stored_url
 
@@ -169,9 +161,7 @@ def test_matomo_client_gets_called_on_get_foo(
 
     matomo_client.post.assert_called()
 
-    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(
-        matcher=make_matcher()
-    )
+    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(matcher=make_matcher())
 
 
 def test_matomo_client_is_not_called_when_user_agent_should_be_ignored(
@@ -192,9 +182,7 @@ def test_matomo_client_is_not_called_when_method_should_be_ignored(
     matomo_client.post.assert_not_called()
 
 
-def test_matomo_client_is_not_called_when_method_is_not_allowed(
-    client: httpx.Client, matomo_client: mock.Mock
-) -> None:
+def test_matomo_client_is_not_called_when_method_is_not_allowed(client: httpx.Client, matomo_client: mock.Mock) -> None:
     response = client.put("/foo")
     assert response.status_code == 200
 
@@ -211,9 +199,7 @@ def test_middleware_works_without_token(
 
     matomo_client.post.assert_called()  # get.assert_called()
 
-    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(
-        matcher=make_matcher()
-    )
+    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(matcher=make_matcher())
 
 
 def test_lang_gets_tracked_if_accept_language_is_set(
@@ -226,9 +212,7 @@ def test_lang_gets_tracked_if_accept_language_is_set(
 
     matomo_client.post.assert_called()  # get.assert_called()
 
-    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(
-        matcher=make_matcher()
-    )
+    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(matcher=make_matcher())
 
 
 def test_x_forwarded_for_changes_ip(
@@ -240,9 +224,7 @@ def test_x_forwarded_for_changes_ip(
 
     matomo_client.post.assert_called()  # get.assert_called()
 
-    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(
-        matcher=make_matcher()
-    )
+    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(matcher=make_matcher())
 
 
 def test_matomo_client_doesnt_gets_called_on_get_health(
@@ -272,15 +254,11 @@ def test_matomo_details_updates_action_name(
 
     matomo_client.post.assert_called()  # get.assert_called()
 
-    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(
-        matcher=make_matcher()
-    )
+    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(matcher=make_matcher())
 
 
 @pytest.mark.parametrize("path", ["/some/old/path", "/old/path", "/really/old"])
-def test_matomo_client_doesnt_gets_called_on_get_old(
-    client: httpx.Client, matomo_client: mock.Mock, path: str
-) -> None:
+def test_matomo_client_doesnt_gets_called_on_get_old(client: httpx.Client, matomo_client: mock.Mock, path: str) -> None:
     response = client.get(path)
     assert response.status_code == 200
     matomo_client.post.assert_not_called()
@@ -296,15 +274,11 @@ def test_matomo_client_gets_called_on_get_custom_var(
 
     matomo_client.post.assert_called()
 
-    matcher = matchers.path_type(
-        {"gt_ms": (float,), "rand": (int,), "pf_srv": (float,), "ua": (str,)}
-    )
+    matcher = matchers.path_type({"gt_ms": (float,), "rand": (int,), "pf_srv": (float,), "ua": (str,)})
     assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(matcher=matcher)
 
 
-def test_api_works_even_if_tracking_fails(
-    client: httpx.Client, matomo_client: mock.Mock
-) -> None:
+def test_api_works_even_if_tracking_fails(client: httpx.Client, matomo_client: mock.Mock) -> None:
     matomo_client.post = mock.Mock(return_value=Response(status_code=500))
     response = client.get("/foo")
 
@@ -313,9 +287,7 @@ def test_api_works_even_if_tracking_fails(
     matomo_client.post.assert_called()
 
 
-def test_app_works_even_if_tracking_raises(
-    client: httpx.Client, matomo_client: mock.Mock
-) -> None:
+def test_app_works_even_if_tracking_raises(client: httpx.Client, matomo_client: mock.Mock) -> None:
     matomo_client.post = mock.Mock(side_effect=httpx.HTTPError("custom"))
     response = client.get("/foo")
 
@@ -331,6 +303,4 @@ def test_matomo_client_gets_called_on_get_bar(
     assert response.status_code >= 500
 
     matomo_client.post.assert_called()
-    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(
-        matcher=make_matcher()
-    )
+    assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(matcher=make_matcher())
