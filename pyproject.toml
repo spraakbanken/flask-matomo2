@@ -29,7 +29,6 @@ classifiers = [
 ]
 dependencies = [
   "flask>=2.3",
-  "httpx>=0.24",
   "matomo-core>=0.3.4",
   "werkzeug>=2.3.2",
 ]
