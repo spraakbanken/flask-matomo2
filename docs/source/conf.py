@@ -19,7 +19,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "flask-matomo2"
-copyright = "(2018) Lucas Hild, (2023-2025) Språkbanken, Göteborgs universitet."  # noqa: A001
+copyright = "(2018) Lucas Hild, (2023-2025) Språkbanken, Göteborgs universitet."  # ruff: ignore[builtin-variable-shadowing]
 author = "Lucas Hild, Kristoffer Andersson"
 
 # The short X.Y version

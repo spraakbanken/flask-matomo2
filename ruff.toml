@@ -11,8 +11,8 @@ select = [
   "C4",  # flake8-comprehensions
   "COM",  # flake8-commas
   "D",  # pydocstyle
-  "D400",  # pydocstyle: ends-in-period
-  "D401",  # pydocstyle: non-imperative-mood
+  "missing-trailing-period",  # pydocstyle: ends-in-period
+  "non-imperative-mood",  # pydocstyle: non-imperative-mood
   "E",  # pycodestyle: errors
   "F",  # Pyflakes
   "FLY",  # flynt
@@ -37,12 +37,12 @@ select = [
   "W",  # pycodestyle: warnings
 ]
 ignore = [
-  "ANN401",  # flake8-annotations: any-type
-  "B008",  # flake8-bugbear: function-call-in-default-argument
-  "ISC001",
-  "COM812",  # flake8-commas: missing-trailing-comma
+  "any-type",  # flake8-annotations: any-type
+  "function-call-in-default-argument",  # flake8-bugbear: function-call-in-default-argument
+  "single-line-implicit-string-concatenation",
+  "missing-trailing-comma",  # flake8-commas: missing-trailing-comma
   "PLR09",  # Pylint: too-many-*
-  "SIM105",  # flake8-simplify: suppressible-exception
+  "suppressible-exception",  # flake8-simplify: suppressible-exception
 ]
 preview = true
 
@@ -54,6 +54,6 @@ convention = "google"
 
 # Ignore `E402` (import violations) in all `__init__.py` files, and in `path/to/file.py`.
 [lint.per-file-ignores]
-"tests/**/*.py" = ["D", "ARG002", "E501", "PLR2004"]
+"tests/**/*.py" = ["D", "unused-method-argument", "line-too-long", "magic-value-comparison"]
 "docs/source/conf.py" = ["D"]
-"examples/**/*.py" = ["D", "ARG002", "E501", "PLR2004"]
+"examples/**/*.py" = ["D", "unused-method-argument", "line-too-long", "magic-value-comparison", "non-empty-init-module"]

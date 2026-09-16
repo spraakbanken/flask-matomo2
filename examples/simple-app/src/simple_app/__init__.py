@@ -22,7 +22,7 @@ matomo = Matomo(app, matomo_url=MATOMO_URL, id_site=MATOMO_ID_SITE, token_auth=M
 
 
 @app.route("/")
-def home():  # noqa: ANN201
+def home():  # ruff: ignore[missing-return-type-undocumented-public-function]
     return jsonify({"message": "Hello World"})
 
 

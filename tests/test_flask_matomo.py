@@ -124,14 +124,14 @@ def fixture_client_wo_token(
         yield client
 
 
-def make_matcher():  # noqa: ANN201
+def make_matcher():  # ruff: ignore[missing-return-type-undocumented-public-function]
     return matchers.path_type({"gt_ms": (float,), "rand": (int,)})
 
 
 def test_matomo_client_sets_urlref_if_referer_exists(
     client: httpx.Client,
     matomo_client: mock.Mock,
-    snapshot_json,  # noqa: ANN001
+    snapshot_json,  # ruff: ignore[missing-type-function-argument]
 ) -> None:
     _response = client.get("/foo", headers={"Referer": "http://example.com"})
 
@@ -152,7 +152,7 @@ def test_matomo_url_works_with_or_without_trailing_slash_or_filename(in_url: str
     assert matomo.matomo_url == stored_url
 
 
-def test_matomo_client_gets_called_on_get_foo(client: httpx.Client, matomo_client: mock.Mock, snapshot_json) -> None:  # noqa: ANN001
+def test_matomo_client_gets_called_on_get_foo(client: httpx.Client, matomo_client: mock.Mock, snapshot_json) -> None:  # ruff: ignore[missing-type-function-argument]
     response = client.get("/foo")
     assert response.status_code == 200
 
@@ -186,7 +186,7 @@ def test_matomo_client_is_not_called_when_method_is_not_allowed(client: httpx.Cl
     matomo_client.post.assert_not_called()
 
 
-def test_middleware_works_without_token(client_wo_token: httpx.Client, matomo_client: mock.Mock, snapshot_json) -> None:  # noqa: ANN001
+def test_middleware_works_without_token(client_wo_token: httpx.Client, matomo_client: mock.Mock, snapshot_json) -> None:  # ruff: ignore[missing-type-function-argument]
     response = client_wo_token.get("/foo")
     assert response.status_code == 200
 
@@ -198,7 +198,7 @@ def test_middleware_works_without_token(client_wo_token: httpx.Client, matomo_cl
 def test_lang_gets_tracked_if_accept_language_is_set(
     client: httpx.Client,
     matomo_client: mock.Mock,
-    snapshot_json,  # noqa: ANN001
+    snapshot_json,  # ruff: ignore[missing-type-function-argument]
 ) -> None:
     response = client.get("/foo", headers={"accept-language": "sv"})
     assert response.status_code == 200
@@ -208,7 +208,7 @@ def test_lang_gets_tracked_if_accept_language_is_set(
     assert matomo_client.post.call_args.kwargs["data"] == snapshot_json(matcher=make_matcher())
 
 
-def test_x_forwarded_for_changes_ip(client: httpx.Client, matomo_client: mock.Mock, snapshot_json) -> None:  # noqa: ANN001
+def test_x_forwarded_for_changes_ip(client: httpx.Client, matomo_client: mock.Mock, snapshot_json) -> None:  # ruff: ignore[missing-type-function-argument]
     forwarded_ip = "127.0.0.2"
     response = client.get("/foo", headers={"x-forwarded-for": forwarded_ip})
     assert response.status_code == 200
@@ -237,7 +237,7 @@ def test_matomo_client_doesnt_gets_called_on_get_heartbeat(
     matomo_client.post.assert_not_called()
 
 
-def test_matomo_details_updates_action_name(client: httpx.Client, matomo_client: mock.Mock, snapshot_json) -> None:  # noqa: ANN001
+def test_matomo_details_updates_action_name(client: httpx.Client, matomo_client: mock.Mock, snapshot_json) -> None:  # ruff: ignore[missing-type-function-argument]
     response = client.get("/bor")
     assert response.status_code == 200
 
@@ -256,7 +256,7 @@ def test_matomo_client_doesnt_gets_called_on_get_old(client: httpx.Client, matom
 def test_matomo_client_gets_called_on_get_custom_var(
     client: httpx.Client,
     matomo_client: mock.Mock,
-    snapshot_json,  # noqa: ANN001
+    snapshot_json,  # ruff: ignore[missing-type-function-argument]
 ) -> None:
     response = client.get("/set/custom/var")
     assert response.status_code == 200
@@ -285,7 +285,7 @@ def test_app_works_even_if_tracking_raises(client: httpx.Client, matomo_client: 
     matomo_client.post.assert_called()
 
 
-def test_matomo_client_gets_called_on_get_bar(client: httpx.Client, matomo_client: mock.Mock, snapshot_json) -> None:  # noqa: ANN001
+def test_matomo_client_gets_called_on_get_bar(client: httpx.Client, matomo_client: mock.Mock, snapshot_json) -> None:  # ruff: ignore[missing-type-function-argument]
     response = client.get("/bar")
     assert response.status_code >= 500
 
